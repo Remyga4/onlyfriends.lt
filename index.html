@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#04050a">
+<title>RemygaStudios — Iki metų video liko</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Playfair+Display:wght@400;500&family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --gold:       #d9b878;
+  --gold-dim:   rgba(217,184,120,.45);
+  --ink:        #f6f2e8;
+  --muted:      rgba(246,242,232,.5);
+  --num-size:   clamp(2.3rem, 8.4vw, 6.4rem);
+  --pad-x:      clamp(32px, 7vw, 88px);
+}
+
+*, *::before, *::after{ box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  min-height:100%;
+  background:#04050a;
+  color:var(--ink);
+  font-family:'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+body.no-scroll{ overflow:hidden; }
+
+/* ============ ATMOSPHERE ============ */
+.backdrop{
+  position:fixed; inset:0; z-index:-2; overflow:hidden;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #18213a 0%, #0a0e18 45%, #04050a 100%);
+}
+.orb{
+  position:absolute; border-radius:50%; filter:blur(90px);
+  will-change:transform;
+  animation:drift 26s ease-in-out infinite alternate;
+}
+.orb--1{ width:60vmax; height:60vmax; left:-22vmax; top:-26vmax;
+  background:radial-gradient(circle, rgba(217,184,120,.30), transparent 65%); }
+.orb--2{ width:58vmax; height:58vmax; right:-20vmax; top:6vmax; animation-delay:-9s;
+  background:radial-gradient(circle, rgba(58,96,180,.34), transparent 65%); }
+.orb--3{ width:70vmax; height:70vmax; left:18vmax; bottom:-42vmax; animation-delay:-16s;
+  background:radial-gradient(circle, rgba(122,44,92,.26), transparent 65%); }
+
+@keyframes drift{
+  to{ transform:translate3d(4vmax,-3vmax,0) scale(1.12); }
+}
+
+/* film grain */
+.grain{
+  position:fixed; inset:0; z-index:40; pointer-events:none; opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:190px 190px;
+  animation:grainShift 7s steps(8) infinite;
+}
+@keyframes grainShift{
+  0%  { background-position:0 0; }
+  25% { background-position:-38px 22px; }
+  50% { background-position:24px -34px; }
+  75% { background-position:-16px -18px; }
+  100%{ background-position:0 0; }
+}
+
+/* vignette */
+.vignette{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(125% 95% at 50% 42%, transparent 38%, rgba(0,0,0,.72) 100%);
+}
+
+/* ============ LAYOUT ============ */
+.wrap{
+  width:min(1180px, 100% - var(--pad-x));
+  margin-inline:auto;
+}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:clamp(78px, 11vh, 112px) 0 clamp(30px, 5vh, 52px);
+}
+
+/* ---- brand / logo wordmark ---- */
+.brand{
+  position:absolute;
+  top:clamp(18px, 3.2vh, 36px);
+  left:50%;
+  transform:translateX(-50%);
+  margin:0;
+  font-family:'Clever Couple', 'Dancing Script', 'Segoe Script', 'Brush Script MT', cursive;
+  font-weight:600;
+  font-size:clamp(1.55rem, 3.6vw, 2.5rem);
+  line-height:1.1;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  background:linear-gradient(180deg,#fffdf8 0%, #efe4cc 55%, #c8b184 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  filter:drop-shadow(0 0 26px rgba(217,184,120,.35));
+  pointer-events:none;
+}
+.brand::after{
+  content:'';
+  display:block;
+  height:1px;
+  margin-top:.34em;
+  background:linear-gradient(90deg, transparent, rgba(217,184,120,.75), transparent);
+}
+
+.ornament{
+  display:flex; align-items:center; justify-content:center;
+  gap:16px;
+  margin-bottom:clamp(14px,2.6vh,26px);
+}
+.ornament span{
+  display:block; height:1px;
+  width:clamp(44px,11vw,120px);
+  background:linear-gradient(90deg, transparent, rgba(217,184,120,.9));
+}
+.ornament span:last-child{
+  background:linear-gradient(270deg, transparent, rgba(217,184,120,.9));
+}
+.ornament i{
+  width:6px; height:6px; background:var(--gold);
+  transform:rotate(45deg);
+  box-shadow:0 0 14px rgba(217,184,120,.95);
+}
+
+.title{
+  margin:0 0 clamp(20px,3.6vh,38px);
+  font-family:'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-weight:400;
+  font-size:clamp(1.6rem, 4.3vw, 3.5rem);
+  line-height:1.18;
+  letter-spacing:.015em;
+  background:linear-gradient(180deg,#fffdf8 0%, #ece2cc 58%, #c6b48b 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  filter:drop-shadow(0 0 44px rgba(217,184,120,.22));
+}
+
+/* ---- countdown ---- */
+.countdown{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap:clamp(6px,1.4vw,22px);
+}
+.unit{ display:flex; flex-direction:column; align-items:center; }
+
+.num{
+  font-size:var(--num-size);
+  font-weight:200;
+  line-height:.92;
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  background:linear-gradient(180deg,#ffffff 0%, #f1ead9 42%, #b3a07f 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  filter:drop-shadow(0 0 30px rgba(217,184,120,.18));
+}
+
+.label{
+  margin-top:clamp(9px,1.7vh,18px);
+  font-size:clamp(.55rem, 1.4vw, .78rem);
+  font-weight:400;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color:rgba(246,242,232,.46);
+}
+
+.colon{
+  font-size:calc(var(--num-size) * .46);
+  font-weight:200;
+  line-height:1;
+  color:var(--gold-dim);
+  margin-top:calc(var(--num-size) * .22);
+  animation:blink 2s ease-in-out infinite;
+  user-select:none;
+}
+@keyframes blink{
+  0%, 100%{ opacity:.32; }
+  50%     { opacity:.9; }
+}
+
+.deadline{
+  margin:clamp(18px,3vh,32px) 0 0;
+  font-size:clamp(.62rem, 1.35vw, .78rem);
+  font-weight:400;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ============ VIDEOS ============ */
+.videos{
+  position:relative;
+  padding:clamp(8px,2vh,26px) 0 clamp(64px,11vh,120px);
+}
+
+.section-head{
+  display:flex; align-items:center; gap:clamp(14px,2.5vw,26px);
+  margin-bottom:clamp(20px,3.4vh,38px);
+}
+.section-head h2{
+  margin:0;
+  font-family:'Playfair Display', Georgia, serif;
+  font-weight:400;
+  font-size:clamp(.85rem, 1.7vw, 1.1rem);
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:rgba(246,242,232,.68);
+  white-space:nowrap;
+}
+.section-head .rule{
+  flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(217,184,120,.42), rgba(217,184,120,0));
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap:clamp(14px, 2vw, 26px);
+}
+
+.card{
+  position:relative;
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  aspect-ratio:16 / 9;
+  background:#0a0d16;
+  isolation:isolate;
+  box-shadow:
+    0 20px 44px -22px rgba(0,0,0,.95),
+    inset 0 0 0 1px rgba(255,255,255,.07);
+  transition:transform .55s cubic-bezier(.2,.7,.2,1), box-shadow .55s ease;
+}
+.card img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+  filter:saturate(.82) brightness(.68) contrast(1.06);
+  transition:transform .9s cubic-bezier(.2,.7,.2,1), filter .6s ease;
+}
+.card::after{
+  content:'';
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg, rgba(4,5,10,.18) 0%, rgba(4,5,10,.04) 42%, rgba(4,5,10,.82) 100%);
+}
+
+.card:hover,
+.card:focus-visible{
+  transform:translateY(-6px);
+  box-shadow:
+    0 34px 64px -26px rgba(0,0,0,1),
+    0 0 0 1px rgba(217,184,120,.55),
+    0 0 46px -10px rgba(217,184,120,.3);
+}
+.card:hover img,
+.card:focus-visible img{
+  transform:scale(1.07);
+  filter:saturate(1.02) brightness(.86) contrast(1.02);
+}
+.card:focus-visible{ outline:none; }
+
+.card .idx{
+  position:absolute; top:clamp(10px,1.4vw,15px); left:clamp(11px,1.5vw,16px);
+  z-index:2;
+  font-size:.68rem;
+  font-weight:500;
+  letter-spacing:.24em;
+  color:rgba(255,255,255,.72);
+  text-shadow:0 1px 8px rgba(0,0,0,.8);
+}
+
+.play{
+  position:absolute; inset:0; margin:auto;
+  z-index:2;
+  width:clamp(46px, 8vw, 64px);
+  aspect-ratio:1;
+  border-radius:50%;
+  display:grid; place-items:center;
+  background:rgba(8,10,16,.32);
+  border:1px solid rgba(255,255,255,.4);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  transition:transform .45s cubic-bezier(.2,.7,.2,1), background .45s ease, border-color .45s ease;
+}
+.play svg{
+  width:38%; fill:#fff; transform:translateX(9%);
+  transition:fill .35s ease;
+}
+.card:hover .play,
+.card:focus-visible .play{
+  transform:scale(1.12);
+  background:rgba(217,184,120,.92);
+  border-color:rgba(255,255,255,.95);
+}
+.card:hover .play svg,
+.card:focus-visible .play svg{ fill:#0a0b10; }
+
+/* ============ LIGHTBOX ============ */
+.lightbox{
+  position:fixed; inset:0; z-index:60;
+  display:grid; place-items:center;
+  padding:clamp(12px,4vw,48px);
+  opacity:0; visibility:hidden;
+  transition:opacity .35s ease, visibility .35s ease;
+}
+.lightbox.open{ opacity:1; visibility:visible; }
+
+.lightbox__backdrop{
+  position:absolute; inset:0;
+  background:rgba(3,4,8,.9);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+}
+
+.lightbox__frame{
+  --pad:clamp(12px,4vw,48px);
+  position:relative;
+  width:min(1100px, calc(100vw - var(--pad)*2), calc((100svh - var(--pad)*2) * 16 / 9));
+  aspect-ratio:16 / 9;
+  border-radius:12px;
+  overflow:hidden;
+  background:#000;
+  box-shadow:
+    0 50px 130px -30px rgba(0,0,0,1),
+    0 0 0 1px rgba(217,184,120,.4);
+  transform:scale(.955);
+  transition:transform .42s cubic-bezier(.2,.7,.2,1);
+}
+.lightbox.open .lightbox__frame{ transform:scale(1); }
+.lightbox__frame iframe{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  border:0;
+}
+
+.lightbox__close{
+  position:fixed;
+  top:clamp(12px,3vw,26px); right:clamp(12px,3vw,26px);
+  z-index:2;
+  width:46px; height:46px;
+  display:grid; place-items:center;
+  border-radius:50%;
+  cursor:pointer;
+  color:#f6f2e8;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  transition:background .3s, border-color .3s, transform .3s;
+}
+.lightbox__close:hover{
+  background:rgba(217,184,120,.9);
+  border-color:rgba(217,184,120,1);
+  color:#0a0b10;
+  transform:rotate(90deg);
+}
+
+/* ============ RESPONSIVE / A11Y ============ */
+@media (max-width:560px){
+  .label{ letter-spacing:.22em; }
+  .deadline{ letter-spacing:.3em; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- atmosphere -->
+<div class="backdrop" aria-hidden="true">
+  <div class="orb orb--1"></div>
+  <div class="orb orb--2"></div>
+  <div class="orb orb--3"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+
+    <p class="brand">RemygaStudios</p>
+
+    <div class="wrap">
+      <div class="ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+
+      <h1 class="title">Iki metų video liko:</h1>
+
+      <div class="countdown" id="countdown" role="timer">
+        <div class="unit">
+          <div class="num" id="days">00</div>
+          <div class="label">Dienos</div>
+        </div>
+        <div class="colon" aria-hidden="true">:</div>
+        <div class="unit">
+          <div class="num" id="hours">00</div>
+          <div class="label">Valandos</div>
+        </div>
+        <div class="colon" aria-hidden="true">:</div>
+        <div class="unit">
+          <div class="num" id="minutes">00</div>
+          <div class="label">Minutės</div>
+        </div>
+        <div class="colon" aria-hidden="true">:</div>
+        <div class="unit">
+          <div class="num" id="seconds">00</div>
+          <div class="label">Sekundės</div>
+        </div>
+      </div>
+
+      <p class="deadline">2026 · gruodžio 31 · 23:59</p>
+    </div>
+  </section>
+
+  <!-- ================= VIDEOS ================= -->
+  <section class="videos" id="videos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Ankstesni metų video</h2>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vaizdo įrašas" aria-hidden="true">
+  <div class="lightbox__backdrop" data-close></div>
+  <button class="lightbox__close" type="button" data-close aria-label="Uždaryti">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <div class="lightbox__frame" id="lightboxFrame"></div>
+</div>
+
+<script>
+/* =========================================================
+   1. COUNTDOWN  →  2026-12-31 23:59 (local time)
+   ========================================================= */
+const TARGET = new Date(2026, 11, 31, 23, 59, 0, 0).getTime();
+
+const el = {
+  days:    document.getElementById('days'),
+  hours:   document.getElementById('hours'),
+  minutes: document.getElementById('minutes'),
+  seconds: document.getElementById('seconds')
+};
+
+const pad = n => String(n).padStart(2, '0');
+
+function renderCountdown(){
+  const diff  = Math.max(0, TARGET - Date.now());
+  const total = Math.floor(diff / 1000);
+
+  el.days.textContent    = pad(Math.floor(total / 86400));
+  el.hours.textContent   = pad(Math.floor(total % 86400 / 3600));
+  el.minutes.textContent = pad(Math.floor(total % 3600 / 60));
+  el.seconds.textContent = pad(total % 60);
+}
+
+/* self-correcting loop (no drift) */
+(function tick(){
+  renderCountdown();
+  const delay = 1000 - (Date.now() % 1000);
+  setTimeout(tick, delay + 15);
+})();
+
+
+/* =========================================================
+   2. VIDEO DATA
+   ========================================================= */
+const VIDEOS = [
+  { id: 'YteW4NFRrv4' },
+  { id: 'CnVs82t-3jU' },
+  { id: 'YC5R2Z5AVgY' },
+  { id: 'CNaJcMWvbsM' },
+  { id: '7w9SB3NzPD4' }
+];
+
+
+/* =========================================================
+   3. BUILD THUMBNAIL GRID
+   ========================================================= */
+const grid = document.getElementById('grid');
+
+VIDEOS.forEach((video, i) => {
+  const num = String(i + 1).padStart(2, '0');
+
+  const card = document.createElement('button');
+  card.type = 'button';
+  card.className = 'card';
+  card.setAttribute('aria-label', `Atidaryti vaizdo įrašą Nr. ${i + 1}`);
+
+  card.innerHTML = `
+    <img
+      src="https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg"
+      alt="Vaizdo įrašo Nr. ${i + 1} miniatiūra"
+      loading="lazy"
+      onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${video.id}/mqdefault.jpg'">
+    <span class="idx" aria-hidden="true">${num}</span>
+    <span class="play" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </span>
+  `;
+
+  card.addEventListener('click', () => openVideo(video.id, i));
+  grid.appendChild(card);
+});
+
+
+/* =========================================================
+   4. LIGHTBOX PLAYER
+   ========================================================= */
+const lightbox = document.getElementById('lightbox');
+const frame    = document.getElementById('lightboxFrame');
+const closeBtn = lightbox.querySelector('.lightbox__close');
+let lastFocused = null;
+
+function openVideo(id, index){
+  lastFocused = document.activeElement;
+
+  frame.innerHTML = `
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1"
+      title="Vaizdo įrašas Nr. ${index + 1}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  `;
+
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('no-scroll');
+  closeBtn.focus();
+}
+
+function closeVideo(){
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('no-scroll');
+  setTimeout(() => { frame.innerHTML = ''; }, 320);   // stop playback
+  if (lastFocused) lastFocused.focus();
+}
+
+lightbox.addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) closeVideo();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && lightbox.classList.contains('open')) closeVideo();
+});
+</script>
+
+</body>
+</html>
